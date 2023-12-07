@@ -19,5 +19,5 @@ class OpenaiConnection():
         return message
 
 
-load_dotenv(f"{os.path.dirname(os.path.abspath(__file__))}/../../.env")
+load_dotenv()
 openai_connection = OpenaiConnection(os.getenv('API_KEY_GPT'))
