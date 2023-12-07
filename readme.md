@@ -82,4 +82,4 @@ A integração do chatgpt está na rota **histories/{id}/add-part** e deve ser u
 }
 ```
 
-Essa rota utilizará todas as informações prévias da história e com o auxílio do chatgpt, encaixará o trexo passado no melhor lugar da história já criada, realizando as adaptações necessárias para tal.
+Essa rota utilizará todas as informações prévias da história e com o auxílio do chatgpt, encaixará o trecho passado no melhor lugar da história já criada, realizando as adaptações necessárias para tal.
