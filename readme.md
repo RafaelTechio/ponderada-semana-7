@@ -12,7 +12,7 @@ docker-compose up --build -d
 
 Dessa forma todas as tecnologias e libs necessárias serão instaladas e configuradas.
 
-Além disso, é necessário criar um arquivo .env na raíz do projeto com a **API_KEY** de sua API do chatgpt, seguindo o padrão:
+Além disso, é necessário criar um arquivo **.env** dentro da pasta **/src/config** do projeto com a **API_KEY** de sua API do chatgpt, seguindo o padrão:
 
 ```
 API_KEY_GPT="sua-api-key-aqui!"
