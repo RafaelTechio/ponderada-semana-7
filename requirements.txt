@@ -5,3 +5,5 @@ mysql-connector-python
 openai
 PyJWT
 python-dotenv
+requests
+pytest
