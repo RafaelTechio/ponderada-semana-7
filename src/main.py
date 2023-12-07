@@ -26,7 +26,10 @@ class LoginInput(BaseModel):
     nickname: str
     password: str
 
-@app.post("/users/login")
+class LoginOutput(BaseModel):
+    token: str
+
+@app.post("/users/login", response_model=LoginOutput, summary="Rota para login", tags=['User'])
 async def login(body: LoginInput):
     result = User.login(body.nickname, body.password)
     if(result):
@@ -81,7 +84,7 @@ class HistoryCreate(BaseModel):
 async def create_history(body: HistoryCreate):
     return History.create(body.title, body.summary, body.category, body.content, body.user_id)
 
-@app.get("/histories", response_model=list[HistoryModel], summary="Lista histórias", tags=['History'])
+@app.get("/histories", response_model=list[HistoryModel], summary="Lista histórias do usuário autenticado", tags=['History'])
 async def list_histories(authorization: str = Header(None)):
     user = User.get_user_by_token(authorization.split(" ")[-1])
     if not user:
