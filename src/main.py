@@ -53,7 +53,7 @@ class HistoryCreate(BaseModel):
     user_id: int
 
 @app.post("/histories")
-async def create_user(body: HistoryCreate):
+async def create_history(body: HistoryCreate):
     return History.create(body.title, body.summary, body.category, body.content, body.user_id)
 
 @app.get("/histories")
@@ -61,7 +61,7 @@ async def list_histories():
     return History.list_histories()
 
 @app.get("/histories/{id}")
-async def get_user(id: int):
+async def get_history(id: int):
     return History.get_by_id(id)
 
 
@@ -72,7 +72,7 @@ class HistoryUpdate(BaseModel):
     content: str
 
 @app.put("/histories/{id}")
-async def update_user(id: int, body: HistoryUpdate):
+async def update_history(id: int, body: HistoryUpdate):
     history = History.get_by_id(id)
     
     history.title = body.title
@@ -85,6 +85,15 @@ async def update_user(id: int, body: HistoryUpdate):
     return history
 
 @app.delete("/histories/{id}")
-async def delete_user(id: int):
-    user = History.get_by_id(id)
-    return user.delete()
+async def delete_history(id: int):
+    history = History.get_by_id(id)
+    return history.delete()
+
+class AddHistoryPart(BaseModel):
+    part: str
+
+@app.post("/histories/{id}/add-part")
+async def add_contet_history(id: int, body: AddHistoryPart):
+    history = History.get_by_id(id)
+    history.add_part_and_merge_with_gpt(body.part)
+    return history
