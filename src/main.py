@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel
-
+import jwt
 from src.entities.user import User
 from src.entities.history import History
 
@@ -21,6 +21,18 @@ class UserCreate(BaseModel):
 @app.post("/users", response_model=UserModel, summary="Cria um usuário", tags=['User'])
 async def create_user(body: UserCreate):
     return User.create(body.nickname, body.password)
+
+class LoginInput(BaseModel):
+    nickname: str
+    password: str
+
+@app.post("/users/login")
+async def login(body: LoginInput):
+    result = User.login(body.nickname, body.password)
+    if(result):
+        return {'token': result.make_token()}
+    else:
+        raise HTTPException(status_code=400, detail="Credenciais Inválidas")
 
 @app.get("/users", response_model=list[UserModel], summary="Lista usuários", tags=['User'])
 async def list_users():
@@ -58,7 +70,6 @@ class HistoryModel(BaseModel):
     category: str
     content: str
     user_id: int
-    moment: str
 class HistoryCreate(BaseModel):
     title: str
     summary: str
@@ -71,8 +82,12 @@ async def create_history(body: HistoryCreate):
     return History.create(body.title, body.summary, body.category, body.content, body.user_id)
 
 @app.get("/histories", response_model=list[HistoryModel], summary="Lista histórias", tags=['History'])
-async def list_histories():
-    return History.list_histories()
+async def list_histories(authorization: str = Header(None)):
+    user = User.get_user_by_token(authorization.split(" ")[-1])
+    if not user:
+        raise HTTPException(status_code=403, detail="Credenciais Inválidas")
+
+    return user.list_histories()
 
 @app.get("/histories/{id}", response_model=HistoryModel, summary="Obtem uma história por ID", tags=['History'])
 async def get_history(id: int):

@@ -2,6 +2,7 @@ from src.daos.user_dao import user_dao
 from src.entities.history import History
 import random
 import hashlib
+import jwt
 
 class User():
     def __init__(self, id, nickname, password, password_salt):
@@ -49,6 +50,25 @@ class User():
         print("=====================================", users_info)
         return User.create_by_obj_arr(users_info)
     
+    def make_token(self):
+        payload = {
+            'id': self.id
+        }
+        return jwt.encode(payload, 'teste', algorithm="HS256")
+    
+    @staticmethod
+    def get_user_by_token(token: str):
+        try:
+            payload = jwt.decode(token, 'teste', algorithms=["HS256"])
+            print(payload.get('id'))
+            return User.get_by_id(payload.get('id'))
+        except jwt.ExpiredSignatureError:
+            print("Token expirado")
+            return None
+        except jwt.InvalidTokenError:
+            print("Token inválido")
+            return None
+    
     def update_password(self, password):
         password_salt = random.randint(1000, 9999)
         self.password_salt = password_salt
@@ -58,9 +78,9 @@ class User():
         return History.list_by_user_id(self.id)
     
     def try_login(self, password):
-        hash_obj = hashlib.sha256()
-        hash_obj.update(f"{password}{self.password_salt}")
-        if(hash_obj.hexdigest() == self.password):
+        hashed_password = User.hash_password(f"{password}{self.password_salt}")
+
+        if(hashed_password == self.password):
             return self
         else:
             return False
