@@ -35,6 +35,11 @@ Para rodar os testes, execute o comando:
 pytest
 ```
 
+E deve aparecer o seguinte resultado:
+
+![image](https://github.com/RafaelTechio/ponderada-semana-7/assets/110608373/17e36d2e-18b0-4c03-9143-964fc13463ac)
+
+
 Foram utilizados duas categorias de testes:
 
 ### Testes de integração
@@ -48,13 +53,23 @@ Como as lógicas de negócios estão nas entidades com a lógica de persistênci
 
 ## Referência de API
 
-Para encontrar a referêcia de API desse projeto, rode-o e acesse o endpoint http://localhost:8000/docs
+Para encontrar a referêcia de API desse projeto, rode-o e acesse o endpoint **http://localhost:8000/docs**
+
+Print da referência API:
+
+![image](https://github.com/RafaelTechio/ponderada-semana-7/assets/110608373/84ddf68b-5bd5-4601-a3b8-c56d20cd2362)
+
 
 ## Autenticação
 
 Para a autenticação, há uma rota de login no projeto que deve receber nickname e senha. As senhas serão guardas no banco de dados hasheadas em **sha256** com um salt, impedindo que senhas iguais produzam hashs iguais e garantindo a segurança das senhas. 
 
 Dessa forma, a comunicação entre o client e API quanto a autenticação deve ser feita utilizando tokens JWT. Um token pode ser obtido pela rota de login de usuário e para testes, a rota de listagem de histórias solicita esse token no header **Authorization** no seguinte padrão: **Bearer {token}**, retornando apenas as histórias relacionadas a aquele usuário.
+
+Print de request de autenticação:
+
+![image](https://github.com/RafaelTechio/ponderada-semana-7/assets/110608373/7d36cc1b-56db-4c37-bc8a-0b89e0d87c82)
+
 
 ## ChatGPT
 
